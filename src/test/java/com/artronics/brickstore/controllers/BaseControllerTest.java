@@ -37,6 +37,7 @@ public class BaseControllerTest {
         customer = new Customer(1L, "John");
         order = new Order();
         order.setId(123L);
+        order.setDispatched(false);
         jsonOrder = gson.toJson(order);
 
         // findOne(1) always returns customer, if not we redefine it inside test

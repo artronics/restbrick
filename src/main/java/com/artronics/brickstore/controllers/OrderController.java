@@ -64,6 +64,27 @@ public class OrderController {
         return ResponseEntity.created(location).build();
     }
 
+    @PostMapping(path = "/customers/{customerId}/orders/{orderId}/dispatch")
+    public ResponseEntity dispatchOrder(
+            @PathVariable Long customerId,
+            @PathVariable Long orderId) {
+
+        Order order = orderRepository.findOne(orderId);
+        if (order == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Customer customer = customerRepository.findOne(customerId);
+        if (customer == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        order.setDispatched(true);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok().build();
+    }
+
     @PatchMapping(path = "/customers/{customerId}/orders/{orderId}")
     public ResponseEntity updateOrder(
             @PathVariable Long customerId,
