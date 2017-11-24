@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/customers/{customerId}/orders")
+@RequestMapping
 public class OrderController {
     private CustomerRepository customerRepository;
     private OrderRepository orderRepository;
@@ -26,7 +26,7 @@ public class OrderController {
         this.orderRepository = orderRepository;
     }
 
-    @GetMapping(path = "/{orderId}")
+    @GetMapping(path = "/customers/{customerId}/orders/{orderId}")
     public ResponseEntity<Order> getOrder(@PathVariable Long customerId, @PathVariable Long orderId) {
         if (customerDoesNotExist(customerId)) {
             return ResponseEntity.notFound().build();
@@ -41,12 +41,8 @@ public class OrderController {
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Order>> getOrders(@PathVariable Long customerId) {
-        if (customerDoesNotExist(customerId)) {
-            return ResponseEntity.notFound().build();
-        }
-
+    @GetMapping(path = "/orders")
+    public ResponseEntity<List<Order>> getOrders() {
         List<Order> orders = orderRepository.findAll();
 
         return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);

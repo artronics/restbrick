@@ -101,7 +101,7 @@ public class GetOrderTest {
         List<Order> orders = new LinkedList<>(Arrays.asList(new Order(), new Order()));
         when(orderRepository.findAll()).thenReturn(orders);
         // then
-        mockMvc.perform(get("/customers/1/orders"))
+        mockMvc.perform(get("/orders"))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andReturn();
     }
