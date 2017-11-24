@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 public class BaseControllerTest {
@@ -42,5 +43,6 @@ public class BaseControllerTest {
         when(customerRepository.findOne(1L)).thenReturn(customer);
         // same as orderRepo but for 123
         when(orderRepository.findOne(123L)).thenReturn(order);
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
     }
 }

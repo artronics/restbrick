@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -47,8 +48,21 @@ public class OrderController {
 
     @PostMapping(path = "/customers/{customerId}/orders")
     public ResponseEntity createOrder(@PathVariable Long customerId, @RequestBody Order order) throws Exception {
-        return ResponseEntity.created(new URI("")).build();
+        Customer customer = customerRepository.findOne(customerId);
+        if (customer == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        order.setCustomer(customer);
+        Order newOrder = orderRepository.save(order);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(newOrder.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
     }
+
     private boolean customerDoesNotExist(Long id) {
         Customer customer = customerRepository.findOne(id);
         return customer == null;
