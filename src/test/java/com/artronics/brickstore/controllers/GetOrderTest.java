@@ -1,16 +1,8 @@
 package com.artronics.brickstore.controllers;
 
-import com.artronics.brickstore.entities.Customer;
 import com.artronics.brickstore.entities.Order;
-import com.artronics.brickstore.repositories.CustomerRepository;
-import com.artronics.brickstore.repositories.OrderRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -22,33 +14,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class GetOrderTest {
-    protected MockMvc mockMvc;
-
-    @InjectMocks
-    private OrderController orderController;
-
-    @Mock
-    protected OrderRepository orderRepository;
-    @Mock
-    protected CustomerRepository customerRepository;
-
-    Customer customer;
-    Order order;
-
+public class GetOrderTest extends BaseControllerTest {
     @Before
+    @Override
     public void setup() {
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
-
-        customer = new Customer(1L, "John");
-        order = new Order();
-        order.setId(123L);
-
-        // findOne(1) always returns customer, if not we redefine it inside test
-        when(customerRepository.findOne(1L)).thenReturn(customer);
-        // same as orderRepo but for 123
-        when(orderRepository.findOne(123L)).thenReturn(order);
+        super.setup();
     }
 
     @Test
