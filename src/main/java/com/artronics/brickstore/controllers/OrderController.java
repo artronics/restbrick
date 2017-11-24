@@ -5,6 +5,7 @@ import com.artronics.brickstore.entities.Order;
 import com.artronics.brickstore.repositories.CustomerRepository;
 import com.artronics.brickstore.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,8 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok().build();
+        List<Order> orders = orderRepository.findAll();
+
+        return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
     }
 }

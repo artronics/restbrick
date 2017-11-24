@@ -1,6 +1,7 @@
 package com.artronics.brickstore.controllers;
 
 import com.artronics.brickstore.entities.Customer;
+import com.artronics.brickstore.entities.Order;
 import com.artronics.brickstore.repositories.CustomerRepository;
 import com.artronics.brickstore.repositories.OrderRepository;
 import org.junit.Before;
@@ -11,8 +12,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class GetOrderTest {
@@ -65,5 +72,15 @@ public class GetOrderTest {
         // then
         mockMvc.perform(get("/customers/1/orders"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getOrders_should_send_all_orders() throws Exception {
+        List<Order> orders = new LinkedList<>(Arrays.asList(new Order(), new Order()));
+        when(orderRepository.findAll()).thenReturn(orders);
+        // then
+        mockMvc.perform(get("/customers/1/orders"))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andReturn();
     }
 }
