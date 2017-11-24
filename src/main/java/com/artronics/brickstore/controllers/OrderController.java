@@ -37,15 +37,14 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
 
-
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
     @GetMapping(path = "/orders")
-    public ResponseEntity<List<Order>> getOrders() {
+    public ResponseEntity<List<Order>> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
 
-        return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     private boolean customerDoesNotExist(Long id) {

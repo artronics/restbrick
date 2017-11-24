@@ -52,18 +52,6 @@ public class GetOrderTest {
     }
 
     @Test
-    public void it_should_send_ok_status_for_single_order() throws Exception {
-        mockMvc.perform(get("/customers/1/orders/123"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void it_should_send_ok_status_for_all_orders() throws Exception {
-        mockMvc.perform(get("/customers/1/orders/123"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     public void with_GET_single_it_returns_404_if_customer_does_not_exist() throws Exception {
         when(customerRepository.findOne(1L)).thenReturn(null);
         // then
@@ -85,7 +73,8 @@ public class GetOrderTest {
         when(orderRepository.findOne(123L)).thenReturn(order);
 
         mockMvc.perform(get("/customers/1/orders/123"))
-                .andExpect(jsonPath("$.orderItems").exists());
+                .andExpect(jsonPath("$.orderItems").exists())
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -97,12 +86,12 @@ public class GetOrderTest {
     }
 
     @Test
-    public void getOrders_should_send_all_orders() throws Exception {
+    public void getAllOrders_should_send_all_orders() throws Exception {
         List<Order> orders = new LinkedList<>(Arrays.asList(new Order(), new Order()));
         when(orderRepository.findAll()).thenReturn(orders);
         // then
         mockMvc.perform(get("/orders"))
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andReturn();
+                .andExpect(status().isOk());
     }
 }
