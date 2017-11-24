@@ -1,12 +1,13 @@
 package com.artronics.brickstore.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.Set;
 
 @Entity
 public class Customer extends BaseEntity {
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Order> orders;
 
     private String name;

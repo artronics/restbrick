@@ -11,6 +11,15 @@ public class OrderItem {
 
     private BigDecimal pricePerItem;
 
+    public OrderItem() {
+    }
+
+    public OrderItem(int quantity, String product, BigDecimal pricePerItem) {
+        this.quantity = quantity;
+        this.product = product;
+        this.pricePerItem = pricePerItem;
+    }
+
     public int getQuantity() {
         return quantity;
     }
