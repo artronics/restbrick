@@ -23,15 +23,7 @@ public class GetOrderTest extends BaseControllerTest {
 
     @Test
     public void with_GET_single_it_returns_404_if_customer_does_not_exist() throws Exception {
-        when(customerRepository.findOne(1L)).thenReturn(null);
-        // then
-        mockMvc.perform(get("/customers/1/orders/123"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void with_GET_list_resource_it_returns_404_if_customer_does_not_exist() throws Exception {
-        mockMvc.perform(get("/customers/332/orders"))
+        mockMvc.perform(get("/customers/1342/orders/123"))
                 .andExpect(status().isNotFound());
     }
 
