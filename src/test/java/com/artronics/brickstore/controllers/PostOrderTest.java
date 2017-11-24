@@ -10,7 +10,8 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,10 +32,7 @@ public class PostOrderTest extends BaseControllerTest {
 
     @Test
     public void it_should_call_save_method_on_orderRepository() throws Exception {
-        mockMvc.perform(
-                post("/customers/1/orders")
-                        .contentType(MediaType.APPLICATION_JSON).content(jsonOrder))
-                .andReturn();
+        performPost();
 
         verify(orderRepository).save(any(Order.class));
     }
@@ -51,32 +49,31 @@ public class PostOrderTest extends BaseControllerTest {
             }
         }).when(orderRepository).save(any(Order.class));
 
-        mockMvc.perform(
-                post("/customers/1/orders")
-                        .contentType(MediaType.APPLICATION_JSON).content(jsonOrder));
-
+        performPost();
     }
 
     @Test
-    public void it_should_return_NOT_FOUND_if_user_does_not_exist() throws Exception {
-        when(customerRepository.findOne(1L)).thenReturn(null);
-
+    public void it_should_return_NOT_FOUND_if_customer_does_not_exist() throws Exception {
         this.mockMvc.perform(
-                post("/customers/1/orders")
+                post("/customers/1232/orders")
                         .contentType(MediaType.APPLICATION_JSON).content(jsonOrder))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void it_should_return_location_of_created_resource() throws Exception {
-        MvcResult result = mockMvc.perform(
-                post("/customers/1/orders")
-                        .contentType(MediaType.APPLICATION_JSON).content(jsonOrder))
-                .andReturn();
+        MvcResult result = performPost();
 
         // then
         String location = result.getResponse().getHeader("Location");
         assertThat(location).isEqualTo("http://localhost/customers/1/orders/123");
+    }
+
+    private MvcResult performPost() throws Exception {
+        return mockMvc.perform(
+                post("/customers/1/orders")
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonOrder))
+                .andReturn();
     }
 
 }

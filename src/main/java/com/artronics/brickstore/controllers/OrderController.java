@@ -47,7 +47,7 @@ public class OrderController {
     }
 
     @PostMapping(path = "/customers/{customerId}/orders")
-    public ResponseEntity createOrder(@PathVariable Long customerId, @RequestBody Order order) throws Exception {
+    public ResponseEntity createOrder(@PathVariable Long customerId, @RequestBody Order order) {
         Customer customer = customerRepository.findOne(customerId);
         if (customer == null) {
             return ResponseEntity.notFound().build();
@@ -61,6 +61,15 @@ public class OrderController {
                 .buildAndExpand(newOrder.getId()).toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @PatchMapping(path = "/customers/{customerId}/orders/{orderId}")
+    public ResponseEntity updateOrder(
+            @PathVariable Long customerId,
+            @PathVariable Long orderId,
+            @RequestBody Order order) {
+
+        return ResponseEntity.ok().build();
     }
 
     private boolean customerDoesNotExist(Long id) {
