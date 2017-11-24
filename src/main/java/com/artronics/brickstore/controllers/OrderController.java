@@ -5,6 +5,7 @@ import com.artronics.brickstore.entities.Order;
 import com.artronics.brickstore.repositories.CustomerRepository;
 import com.artronics.brickstore.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,7 +70,29 @@ public class OrderController {
             @PathVariable Long orderId,
             @RequestBody Order order) {
 
-        return ResponseEntity.ok().build();
+        Order oldOrder = orderRepository.findOne(orderId);
+        if (oldOrder == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Customer customer = customerRepository.findOne(customerId);
+        if (customer == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // we just need to setId of order which comes from request
+        order.setId(order.getId());
+        orderRepository.save(order);
+
+        // set Location to new order
+        String location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .buildAndExpand(orderId).toUriString();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.LOCATION, location);
+
+        return ResponseEntity.ok().headers(headers).build();
     }
 
     private boolean customerDoesNotExist(Long id) {
