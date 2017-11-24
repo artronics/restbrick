@@ -74,8 +74,7 @@ public class OrderController {
             return ResponseEntity.badRequest().build();
         }
 
-        Customer customer = customerRepository.findOne(customerId);
-        if (customer == null) {
+        if (customerDoesNotExist(customerId)) {
             return ResponseEntity.notFound().build();
         }
 
@@ -96,8 +95,7 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
 
-        Customer customer = customerRepository.findOne(customerId);
-        if (customer == null) {
+        if (customerDoesNotExist(customerId)) {
             return ResponseEntity.notFound().build();
         }
 
