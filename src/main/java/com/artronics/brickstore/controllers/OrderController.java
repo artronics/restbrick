@@ -28,8 +28,7 @@ public class OrderController {
 
     @GetMapping(path = "/{orderId}")
     public ResponseEntity<Order> getOrder(@PathVariable Long customerId, @PathVariable Long orderId) {
-        Customer customer = customerRepository.findOne(customerId);
-        if (customer == null) {
+        if (customerDoesNotExist(customerId)) {
             return ResponseEntity.notFound().build();
         }
 
@@ -44,13 +43,17 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<List<Order>> getOrders(@PathVariable Long customerId) {
-        Customer customer = customerRepository.findOne(customerId);
-        if (customer == null) {
+        if (customerDoesNotExist(customerId)) {
             return ResponseEntity.notFound().build();
         }
 
         List<Order> orders = orderRepository.findAll();
 
         return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
+    }
+
+    private boolean customerDoesNotExist(Long id) {
+        Customer customer = customerRepository.findOne(id);
+        return customer == null;
     }
 }
