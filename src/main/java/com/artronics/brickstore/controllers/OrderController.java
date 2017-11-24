@@ -101,6 +101,10 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
 
+        if (order.isDispatched()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         // we just need to setId of order which comes from request
         order.setId(order.getId());
         orderRepository.save(order);

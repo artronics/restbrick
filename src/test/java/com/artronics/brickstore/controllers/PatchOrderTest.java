@@ -82,4 +82,16 @@ public class PatchOrderTest extends BaseControllerTest {
         String location = result.getResponse().getHeader("Location");
         assertThat(location).isEqualTo("http://localhost/customers/1/orders/123");
     }
+
+    @Test
+    public void it_should_prevent_update_for_dispatched_order() throws Exception {
+        order.setDispatched(true);
+        String jsonOrder = gson.toJson(order);
+
+        mockMvc.perform(
+                patch("/customers/1/orders/123")
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonOrder))
+                .andExpect(status().isBadRequest());
+
+    }
 }
