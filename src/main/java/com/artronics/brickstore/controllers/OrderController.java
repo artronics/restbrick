@@ -33,7 +33,13 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok().build();
+        Order order = orderRepository.findOne(orderId);
+        if (order == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+
+        return new ResponseEntity(order, HttpStatus.OK);
     }
 
     @GetMapping

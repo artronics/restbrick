@@ -34,6 +34,7 @@ public class GetOrderTest {
     protected CustomerRepository customerRepository;
 
     Customer customer;
+    Order order;
 
     @Before
     public void setup() {
@@ -41,9 +42,13 @@ public class GetOrderTest {
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
 
         customer = new Customer(1L, "John");
+        order = new Order();
+        order.setId(123L);
 
         // findOne(1) always returns customer, if not we redefine it inside test
         when(customerRepository.findOne(1L)).thenReturn(customer);
+        // same as orderRepo but for 123
+        when(orderRepository.findOne(123L)).thenReturn(order);
     }
 
     @Test
@@ -71,6 +76,23 @@ public class GetOrderTest {
         when(customerRepository.findOne(1L)).thenReturn(null);
         // then
         mockMvc.perform(get("/customers/1/orders"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getOrder_should_send_one_resource() throws Exception {
+        order.setOrderItems(new LinkedList<>());
+        when(orderRepository.findOne(123L)).thenReturn(order);
+
+        mockMvc.perform(get("/customers/1/orders/123"))
+                .andExpect(jsonPath("$.orderItems").exists());
+    }
+
+    @Test
+    public void if_order_does_not_exist_it_should_send_404() throws Exception {
+        when(orderRepository.findOne(123L)).thenReturn(null);
+        // then
+        mockMvc.perform(get("/customers/1/orders/123"))
                 .andExpect(status().isNotFound());
     }
 
