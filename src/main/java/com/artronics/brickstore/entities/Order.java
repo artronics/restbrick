@@ -20,6 +20,8 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<OrderItem> orderItems;
 
+    private boolean dispatched;
+
     public Customer getCustomer() {
         return customer;
     }
@@ -34,5 +36,13 @@ public class Order extends BaseEntity {
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    public boolean isDispatched() {
+        return dispatched;
+    }
+
+    public void setDispatched(boolean dispatched) {
+        this.dispatched = dispatched;
     }
 }
