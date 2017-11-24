@@ -95,7 +95,8 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
 
-        if (customerDoesNotExist(customerId)) {
+        Customer customer = customerRepository.findOne(customerId);
+        if (customer == null) {
             return ResponseEntity.notFound().build();
         }
 
@@ -105,6 +106,8 @@ public class OrderController {
 
         // we just need to setId of order which comes from request
         order.setId(order.getId());
+        // we also need customer ref
+        order.setCustomer(customer);
         orderRepository.save(order);
 
         // set Location to new order
