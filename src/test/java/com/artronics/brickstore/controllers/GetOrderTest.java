@@ -61,9 +61,7 @@ public class GetOrderTest {
 
     @Test
     public void with_GET_list_resource_it_returns_404_if_customer_does_not_exist() throws Exception {
-        when(customerRepository.findOne(1L)).thenReturn(null);
-        // then
-        mockMvc.perform(get("/customers/1/orders"))
+        mockMvc.perform(get("/customers/332/orders"))
                 .andExpect(status().isNotFound());
     }
 
@@ -79,9 +77,7 @@ public class GetOrderTest {
 
     @Test
     public void if_order_does_not_exist_it_should_send_404() throws Exception {
-        when(orderRepository.findOne(123L)).thenReturn(null);
-        // then
-        mockMvc.perform(get("/customers/1/orders/123"))
+        mockMvc.perform(get("/customers/1/orders/747467"))
                 .andExpect(status().isNotFound());
     }
 
