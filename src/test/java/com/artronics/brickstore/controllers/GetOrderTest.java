@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GetOrderTest extends BaseControllerTest {
     @Before
     @Override
-    public void setup() {
+    public void setup() throws Exception {
         super.setup();
     }
 

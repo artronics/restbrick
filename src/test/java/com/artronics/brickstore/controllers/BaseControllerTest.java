@@ -4,6 +4,7 @@ import com.artronics.brickstore.entities.Customer;
 import com.artronics.brickstore.entities.Order;
 import com.artronics.brickstore.repositories.CustomerRepository;
 import com.artronics.brickstore.repositories.OrderRepository;
+import com.google.gson.Gson;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,14 +26,17 @@ public class BaseControllerTest {
 
     protected Customer customer;
     protected Order order;
+    protected Gson gson = new Gson();
+    protected String jsonOrder;
 
-    protected void setup() {
+    protected void setup() throws Exception {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
 
         customer = new Customer(1L, "John");
         order = new Order();
         order.setId(123L);
+        jsonOrder = gson.toJson(order);
 
         // findOne(1) always returns customer, if not we redefine it inside test
         when(customerRepository.findOne(1L)).thenReturn(customer);
